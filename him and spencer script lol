@@ -13,7 +13,7 @@ _G.SpencerResetConfig = _G.SpencerResetConfig or {
 }
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "Himx_Spencer_Unified_V6"
+screenGui.Name = "Himx_Spencer_SingleFrame_V6"
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -24,194 +24,51 @@ else
     screenGui.Parent = localPlayer:WaitForChild("PlayerGui")
 end
 
-local masterFrame = Instance.new("Frame")
-masterFrame.Name = "MasterFrame"
-masterFrame.Size = UDim2.new(0, 514, 0, 314)
-masterFrame.Position = UDim2.new(0.5, -257, 0.4, -157)
-masterFrame.BackgroundTransparency = 1
-masterFrame.Active = true
-masterFrame.Draggable = true
-masterFrame.ClipsDescendants = true
-masterFrame.Parent = screenGui
+local outerFrame = Instance.new("Frame")
+outerFrame.Name = "OuterFrame"
+outerFrame.Size = UDim2.new(0, 274, 0, 480)
+outerFrame.Position = UDim2.new(0.5, -137, 0.4, -240)
+outerFrame.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+outerFrame.BorderSizePixel = 0
+outerFrame.Active = true
+outerFrame.Draggable = true
+outerFrame.Parent = screenGui
+Instance.new("UICorner", outerFrame).CornerRadius = UDim.new(0, 10)
 
-local leftOuter = Instance.new("Frame", masterFrame)
-leftOuter.Name = "LeftOuter"
-leftOuter.Size = UDim2.new(0, 264, 0, 314)
-leftOuter.Position = UDim2.new(0, 0, 0, 0)
-leftOuter.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
-leftOuter.BorderSizePixel = 0
-Instance.new("UICorner", leftOuter).CornerRadius = UDim.new(0, 10)
+local mainFrame = Instance.new("Frame", outerFrame)
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 270, 0, 476)
+mainFrame.Position = UDim2.new(0, 2, 0, 2)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+mainFrame.BorderSizePixel = 0
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 8)
 
-local leftMain = Instance.new("Frame", leftOuter)
-leftMain.Name = "LeftMain"
-leftMain.Size = UDim2.new(0, 260, 0, 310)
-leftMain.Position = UDim2.new(0, 2, 0, 2)
-leftMain.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-leftMain.BorderSizePixel = 0
-Instance.new("UICorner", leftMain).CornerRadius = UDim.new(0, 8)
-
-local title = Instance.new("TextLabel", leftMain)
+local title = Instance.new("TextLabel", mainFrame)
 title.Name = "TitleText"
-title.Size = UDim2.new(0, 185, 0, 35)
-title.Position = UDim2.new(0, 10, 0, 0)
-title.Text = "/// Himx1x1x1 Zero Ping V5"
+title.Size = UDim2.new(0.9, 0, 0, 30)
+title.Position = UDim2.new(0, 12, 0, 5)
+title.Text = "/// Himx1x1x1 Custom Made by Spencer"
 title.TextColor3 = Color3.fromRGB(0, 255, 100)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.Code
-title.TextSize = 12
+title.TextSize = 11
 title.TextXAlignment = Enum.TextXAlignment.Left
 
-local textBox = Instance.new("TextBox", leftMain)
+local textBox = Instance.new("TextBox", mainFrame)
 textBox.Name = "TextBox"
-textBox.Size = UDim2.new(0.9, 0, 0, 30)
-textBox.Position = UDim2.new(0.05, 0, 0.14, 0)
+textBox.Size = UDim2.new(0, 246, 0, 30)
+textBox.Position = UDim2.new(0, 12, 0, 40)
 textBox.PlaceholderText = "> ENTER TARGET ID/NAME"
 textBox.Text = ""
 textBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 textBox.Font = Enum.Font.Code
-textBox.TextSize = 12
+textBox.TextSize = 11
 textBox.BorderSizePixel = 1
 textBox.BorderColor3 = Color3.fromRGB(50, 50, 50)
 Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 4)
 
 textBox:GetPropertyChangedSignal("Text"):Connect(function() _G.HimxConfig.targetText = textBox.Text end)
-
-local rightOuter = Instance.new("Frame", masterFrame)
-rightOuter.Name = "RightOuter"
-rightOuter.Size = UDim2.new(0, 250, 0, 314) -- Perfectly matched vertical alignment
-rightOuter.Position = UDim2.new(0, 264, 0, 0)
-rightOuter.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
-rightOuter.BorderSizePixel = 0
-Instance.new("UICorner", rightOuter).CornerRadius = UDim.new(0, 10)
-
-local rightMain = Instance.new("Frame", rightOuter)
-rightMain.Name = "RightMain"
-rightMain.Size = UDim2.new(0, 246, 0, 310)
-rightMain.Position = UDim2.new(0, 2, 0, 2)
-rightMain.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-rightMain.BorderSizePixel = 0
-Instance.new("UICorner", rightMain).CornerRadius = UDim.new(0, 8)
-
-local rTitle = Instance.new("TextLabel", rightMain)
-rTitle.Name = "RTitleText"
-rTitle.Size = UDim2.new(0, 180, 0, 35)
-rTitle.Position = UDim2.new(0, 10, 0, 0)
-rTitle.Text = "Himx1x1x1 Custom Made by Spencer"
-rTitle.TextColor3 = Color3.fromRGB(0, 255, 100)
-rTitle.BackgroundTransparency = 1
-rTitle.Font = Enum.Font.Code
-rTitle.TextSize = 11
-rTitle.TextXAlignment = Enum.TextXAlignment.Left
-
-local controlButton = Instance.new("TextButton", rightMain)
-controlButton.Name = "ControlToggle"
-controlButton.Size = UDim2.new(0, 50, 0, 18)
-controlButton.Position = UDim2.new(1, -60, 0, 8)
-controlButton.Text = "[ HIDE ]"
-controlButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-controlButton.TextColor3 = Color3.fromRGB(0, 255, 100)
-controlButton.Font = Enum.Font.Code
-controlButton.TextSize = 11
-Instance.new("UICorner", controlButton).CornerRadius = UDim.new(0, 4)
-
-controlButton.MouseButton1Click:Connect(function()
-    screenGui.MasterFrame.LeftOuter.LeftMain.Visible = not screenGui.MasterFrame.LeftOuter.LeftMain.Visible
-    controlButton.Text = screenGui.MasterFrame.LeftOuter.LeftMain.Visible and "[ HIDE ]" or "[ SHOW ]"
-    controlButton.TextColor3 = screenGui.MasterFrame.LeftOuter.LeftMain.Visible and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
-    for _, child in pairs(rightMain:GetChildren()) do
-        if child ~= rTitle and child ~= controlButton then child.Visible = screenGui.MasterFrame.LeftOuter.LeftMain.Visible end
-    end
-    screenGui.MasterFrame.LeftOuter.Visible = screenGui.MasterFrame.LeftOuter.LeftMain.Visible
-    rightOuter.Size = screenGui.MasterFrame.LeftOuter.LeftMain.Visible and UDim2.new(0, 250, 0, 314) or UDim2.new(0, 250, 0, 39)
-    rightMain.Size = screenGui.MasterFrame.LeftOuter.LeftMain.Visible and UDim2.new(0, 246, 0, 310) or UDim2.new(0, 246, 0, 35)
-end)
-
-local telemetryTitle = Instance.new("TextLabel", rightMain)
-telemetryTitle.Size = UDim2.new(0.9, 0, 0, 20)
-telemetryTitle.Position = UDim2.new(0, 13, 0, 100)
-telemetryTitle.Text = "--- TARGET RADAR TELEMETRY ---"
-telemetryTitle.TextColor3 = Color3.fromRGB(100, 100, 100)
-telemetryTitle.BackgroundTransparency = 1
-telemetryTitle.Font = Enum.Font.Code
-telemetryTitle.TextSize = 11
-
-local hpLabel = Instance.new("TextLabel", rightMain)
-hpLabel.Size = UDim2.new(0.9, 0, 0, 20)
-hpLabel.Position = UDim2.new(0, 13, 0, 125)
-hpLabel.Text = "TARGET HP: NO TARGET"
-hpLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-hpLabel.BackgroundTransparency = 1
-hpLabel.Font = Enum.Font.Code
-hpLabel.TextSize = 12
-hpLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local speedLabel = Instance.new("TextLabel", rightMain)
-speedLabel.Size = UDim2.new(0.9, 0, 0, 20)
-speedLabel.Position = UDim2.new(0, 13, 0, 150)
-speedLabel.Text = "TARGET SPEED: 0 STUDS/S"
-speedLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-speedLabel.BackgroundTransparency = 1
-speedLabel.Font = Enum.Font.Code
-speedLabel.TextSize = 12
-speedLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-local flingButton = Instance.new("TextButton", rightMain)
-flingButton.Name = "FlingToggle"
-flingButton.Size = UDim2.new(0, 220, 0, 35)
-flingButton.Position = UDim2.new(0, 13, 0, 195)
-flingButton.Text = "COMBAT FLING ENGINE: OFF"
-flingButton.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
-flingButton.TextColor3 = Color3.fromRGB(255, 80, 80)
-flingButton.Font = Enum.Font.Code
-flingButton.TextSize = 11
-Instance.new("UICorner", flingButton).CornerRadius = UDim.new(0, 4)
-
-flingButton.MouseButton1Click:Connect(function()
-    _G.HimxConfig.FlingMode = not _G.HimxConfig.FlingMode
-    flingButton.Text = _G.HimxConfig.FlingMode and "COMBAT FLING ENGINE: ON" or "COMBAT FLING ENGINE: OFF"
-    flingButton.BackgroundColor3 = _G.HimxConfig.FlingMode and Color3.fromRGB(120, 20, 20) or Color3.fromRGB(40, 15, 15)
-    flingButton.TextColor3 = _G.HimxConfig.FlingMode and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(255, 80, 80)
-end)
-
-local sliderLabel = Instance.new("TextLabel", leftMain)
-sliderLabel.Size = UDim2.new(0.9, 0, 0, 20)
-sliderLabel.Position = UDim2.new(0.05, 0, 0.40, 0)
-sliderLabel.Text = "OFFSET RANGE: 3.5 STUDS"
-sliderLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-sliderLabel.BackgroundTransparency = 1
-sliderLabel.Font = Enum.Font.Code
-sliderLabel.TextSize = 12
-
-_G.HimxUpdateLabel = function(val) sliderLabel.Text = "OFFSET RANGE: " .. tostring(val) .. " STUDS" end
-
-local sliderTrack = Instance.new("Frame", leftMain)
-sliderTrack.Name = "SliderTrack"
-sliderTrack.Size = UDim2.new(0, 234, 0, 8)
-sliderTrack.Position = UDim2.new(0, 13, 0, 150)
-sliderTrack.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
-Instance.new("UICorner", sliderTrack).CornerRadius = UDim.new(0, 4)
-Instance.new("UIStroke", sliderTrack).Color = Color3.fromRGB(0, 255, 100)
-
-local sliderHandle = Instance.new("TextButton", sliderTrack)
-sliderHandle.Name = "SliderHandle"
-sliderHandle.Size = UDim2.new(0, 14, 0, 18)
-sliderHandle.Position = UDim2.new(0.335, -7, 0.5, -9) 
-sliderHandle.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
-sliderHandle.Text = ""
-Instance.new("UICorner", sliderHandle).CornerRadius = UDim.new(0, 4)
-
-local function processSliderMovement(input)
-    local relativeX = math.clamp((input.Position.X - sliderTrack.AbsolutePosition.X) / sliderTrack.AbsoluteSize.X, 0, 1)
-    sliderHandle.Position = UDim2.new(relativeX, -7, 0.5, -9)
-    local raw = _G.HimxConfig.minDistance + (relativeX * (_G.HimxConfig.maxDistance - _G.HimxConfig.minDistance))
-    _G.HimxConfig.currentDistance = math.floor(raw * 10) / 10
-    if _G.HimxUpdateLabel then _G.HimxUpdateLabel(_G.HimxConfig.currentDistance) end
-end
-
-sliderHandle.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = true end end)
-game:GetService("UserInputService").InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = false end end)
-game:GetService("UserInputService").InputChanged:Connect(function(input) if _G.HimxConfig.isSliding and input.UserInputType == Enum.UserInputType.MouseMovement then processSliderMovement(input) end end)
 
 local function styleButton(btn, active)
     btn.BackgroundColor3 = active and Color3.fromRGB(0, 100, 40) or Color3.fromRGB(25, 25, 25)
@@ -219,28 +76,25 @@ local function styleButton(btn, active)
     btn.TextColor3 = active and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(150, 150, 150)
 end
 
-local backBtn = Instance.new("TextButton", leftMain)
-backBtn.Name = "BackBtn"
-backBtn.Size = UDim2.new(0, 72, 0, 30)
-backBtn.Position = UDim2.new(0, 13, 0, 84)
+local backBtn = Instance.new("TextButton", mainFrame)
+backBtn.Size = UDim2.new(0, 76, 0, 28)
+backBtn.Position = UDim2.new(0, 12, 0, 80)
 backBtn.Text = "BACK"
 backBtn.Font = Enum.Font.Code
 styleButton(backBtn, true)
 Instance.new("UICorner", backBtn).CornerRadius = UDim.new(0, 4)
 
-local frontBtn = Instance.new("TextButton", leftMain)
-frontBtn.Name = "FrontBtn"
-frontBtn.Size = UDim2.new(0, 72, 0, 30)
-frontBtn.Position = UDim2.new(0, 94, 0, 84)
+local frontBtn = Instance.new("TextButton", mainFrame)
+frontBtn.Size = UDim2.new(0, 76, 0, 28)
+frontBtn.Position = UDim2.new(0, 97, 0, 80)
 frontBtn.Text = "FRONT"
 frontBtn.Font = Enum.Font.Code
 styleButton(frontBtn, false)
 Instance.new("UICorner", frontBtn).CornerRadius = UDim.new(0, 4)
 
-local aboveBtn = Instance.new("TextButton", leftMain)
-aboveBtn.Name = "AboveBtn"
-aboveBtn.Size = UDim2.new(0, 72, 0, 30)
-aboveBtn.Position = UDim2.new(0, 175, 0, 84)
+local aboveBtn = Instance.new("TextButton", mainFrame)
+aboveBtn.Size = UDim2.new(0, 76, 0, 28)
+aboveBtn.Position = UDim2.new(0, 182, 0, 80)
 aboveBtn.Text = "ABOVE"
 aboveBtn.Font = Enum.Font.Code
 styleButton(aboveBtn, false)
@@ -257,10 +111,47 @@ backBtn.MouseButton1Click:Connect(function() updatePositionPreset("Back") end)
 frontBtn.MouseButton1Click:Connect(function() updatePositionPreset("Front") end)
 aboveBtn.MouseButton1Click:Connect(function() updatePositionPreset("Above") end)
 
-local recallButton = Instance.new("TextButton", leftMain)
-recallButton.Name = "RecallToggle"
-recallButton.Size = UDim2.new(0, 112, 0, 30)
-recallButton.Position = UDim2.new(0, 13, 0, 195)
+local sliderLabel = Instance.new("TextLabel", mainFrame)
+sliderLabel.Size = UDim2.new(0, 246, 0, 20)
+sliderLabel.Position = UDim2.new(0, 12, 0, 115)
+sliderLabel.Text = "OFFSET RANGE: 3.5 STUDS"
+sliderLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+sliderLabel.BackgroundTransparency = 1
+sliderLabel.Font = Enum.Font.Code
+sliderLabel.TextSize = 11
+sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+_G.HimxUpdateLabel = function(val) sliderLabel.Text = "OFFSET RANGE: " .. tostring(val) .. " STUDS" end
+
+local sliderTrack = Instance.new("Frame", mainFrame)
+sliderTrack.Size = UDim2.new(0, 246, 0, 6)
+sliderTrack.Position = UDim2.new(0, 12, 0, 140)
+sliderTrack.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
+Instance.new("UICorner", sliderTrack).CornerRadius = UDim.new(0, 3)
+Instance.new("UIStroke", sliderTrack).Color = Color3.fromRGB(0, 255, 100)
+
+local sliderHandle = Instance.new("TextButton", sliderTrack)
+sliderHandle.Size = UDim2.new(0, 12, 0, 16)
+sliderHandle.Position = UDim2.new(0.335, -6, 0.5, -8) 
+sliderHandle.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+sliderHandle.Text = ""
+Instance.new("UICorner", sliderHandle).CornerRadius = UDim.new(0, 3)
+
+local function processSliderMovement(input)
+    local relativeX = math.clamp((input.Position.X - sliderTrack.AbsolutePosition.X) / sliderTrack.AbsoluteSize.X, 0, 1)
+    sliderHandle.Position = UDim2.new(relativeX, -6, 0.5, -8)
+    local raw = _G.HimxConfig.minDistance + (relativeX * (_G.HimxConfig.maxDistance - _G.HimxConfig.minDistance))
+    _G.HimxConfig.currentDistance = math.floor(raw * 10) / 10
+    if _G.HimxUpdateLabel then _G.HimxUpdateLabel(_G.HimxConfig.currentDistance) end
+end
+
+sliderHandle.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = true end end)
+game:GetService("UserInputService").InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = false end end)
+game:GetService("UserInputService").InputChanged:Connect(function(input) if _G.HimxConfig.isSliding and input.UserInputType == Enum.UserInputType.MouseMovement then processSliderMovement(input) end end)
+
+local recallButton = Instance.new("TextButton", mainFrame)
+recallButton.Size = UDim2.new(0, 118, 0, 30)
+recallButton.Position = UDim2.new(0, 12, 0, 160)
 recallButton.Text = "REWIND: ON"
 recallButton.BackgroundColor3 = Color3.fromRGB(0, 100, 40)
 recallButton.TextColor3 = Color3.fromRGB(0, 255, 100)
@@ -274,15 +165,19 @@ recallButton.MouseButton1Click:Connect(function()
     recallButton.TextColor3 = _G.HimxConfig.useRecall and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
 end)
 
-local viewButton = Instance.new("TextButton", leftMain)
-viewButton.Name = "ViewToggle"
-viewButton.Size = UDim2.new(0, 112, 0, 30)
-viewButton.Position = UDim2.new(0, 135, 0, 195)
+local viewButton = Instance.new("TextButton", mainFrame)
+viewButton.Size = UDim2.new(0, 118, 0, 30)
+viewButton.Position = UDim2.new(0, 140, 0, 160)
 viewButton.Text = "VIEW: OFF"
 viewButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 viewButton.TextColor3 = Color3.fromRGB(150, 150, 150)
 viewButton.Font = Enum.Font.Code
 Instance.new("UICorner", viewButton).CornerRadius = UDim.new(0, 4)
+
+local function resetCam()
+    local cam = game:GetService("Workspace").CurrentCamera
+    if cam and localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then cam.CameraSubject = localPlayer.Character.Humanoid end
+end
 
 viewButton.MouseButton1Click:Connect(function()
     _G.HimxConfig.viewPlayer = not _G.HimxConfig.viewPlayer
@@ -292,10 +187,9 @@ viewButton.MouseButton1Click:Connect(function()
     if not _G.HimxConfig.viewPlayer then resetCam() end
 end)
 
-local toggleResetBtn = Instance.new("TextButton", rightMain)
-toggleResetBtn.Name = "ResetToggle"
-toggleResetBtn.Size = UDim2.new(0, 108, 0, 40)
-toggleResetBtn.Position = UDim2.new(0, 13, 0, 45)
+local toggleResetBtn = Instance.new("TextButton", mainFrame)
+toggleResetBtn.Size = UDim2.new(0, 118, 0, 35)
+toggleResetBtn.Position = UDim2.new(0, 12, 0, 205)
 toggleResetBtn.Text = "RESET: OFF"
 toggleResetBtn.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
 toggleResetBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
@@ -310,10 +204,9 @@ toggleResetBtn.MouseButton1Click:Connect(function()
     if _G.SpencerResetConfig.autoResetActive and localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then _G.SpencerResetConfig.lastHealth = localPlayer.Character.Humanoid.Health end
 end)
 
-local voidButton = Instance.new("TextButton", rightMain)
-voidButton.Name = "VoidToggle"
-voidButton.Size = UDim2.new(0, 108, 0, 40)
-voidButton.Position = UDim2.new(0, 125, 0, 45)
+local voidButton = Instance.new("TextButton", mainFrame)
+voidButton.Size = UDim2.new(0, 118, 0, 35)
+voidButton.Position = UDim2.new(0, 140, 0, 205)
 voidButton.Text = "INF VOID: ON"
 voidButton.BackgroundColor3 = Color3.fromRGB(15, 40, 15)
 voidButton.TextColor3 = Color3.fromRGB(0, 255, 100)
@@ -327,10 +220,55 @@ voidButton.MouseButton1Click:Connect(function()
     voidButton.TextColor3 = _G.SpencerResetConfig.antiVoidActive and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
 end)
 
-local toggleButton = Instance.new("TextButton", leftMain)
-toggleButton.Name = "SystemToggle"
-toggleButton.Size = UDim2.new(0, 234, 0, 35)
-toggleButton.Position = UDim2.new(0, 13, 0, 250)
+local telemetryTitle = Instance.new("TextLabel", mainFrame)
+telemetryTitle.Size = UDim2.new(0, 246, 0, 20)
+telemetryTitle.Position = UDim2.new(0, 12, 0, 255)
+telemetryTitle.Text = "--- TARGET RADAR TELEMETRY ---"
+telemetryTitle.TextColor3 = Color3.fromRGB(100, 100, 100)
+telemetryTitle.BackgroundTransparency = 1
+telemetryTitle.Font = Enum.Font.Code
+telemetryTitle.TextSize = 10
+
+local hpLabel = Instance.new("TextLabel", mainFrame)
+hpLabel.Size = UDim2.new(0, 246, 0, 20)
+hpLabel.Position = UDim2.new(0, 12, 0, 280)
+hpLabel.Text = "TARGET HP: NO TARGET"
+hpLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+hpLabel.BackgroundTransparency = 1
+hpLabel.Font = Enum.Font.Code
+hpLabel.TextSize = 11
+hpLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local speedLabel = Instance.new("TextLabel", mainFrame)
+speedLabel.Size = UDim2.new(0, 246, 0, 20)
+speedLabel.Position = UDim2.new(0, 12, 0, 305)
+speedLabel.Text = "TARGET SPEED: 0 STUDS/S"
+speedLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+speedLabel.BackgroundTransparency = 1
+speedLabel.Font = Enum.Font.Code
+speedLabel.TextSize = 11
+speedLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local flingButton = Instance.new("TextButton", mainFrame)
+flingButton.Size = UDim2.new(0, 246, 0, 35)
+flingButton.Position = UDim2.new(0, 12, 0, 340)
+flingButton.Text = "COMBAT FLING ENGINE: OFF"
+flingButton.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
+flingButton.TextColor3 = Color3.fromRGB(255, 80, 80)
+flingButton.Font = Enum.Font.Code
+flingButton.TextSize = 11
+Instance.new("UICorner", flingButton).CornerRadius = UDim.new(0, 4)
+
+flingButton.MouseButton1Click:Connect(function()
+    _G.HimxConfig.FlingMode = not _G.HimxConfig.FlingMode
+    flingButton.Text = _G.HimxConfig.FlingMode and "COMBAT FLING ENGINE: ON" or "COMBAT FLING ENGINE: OFF"
+    flingButton.BackgroundColor3 = _G.HimxConfig.FlingMode and Color3.fromRGB(120, 20, 20) or Color3.fromRGB(40, 15, 15)
+    flingButton.TextColor3 = _G.HimxConfig.FlingMode and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(255, 80, 80)
+end)
+
+local toggleButton = Instance.new("TextButton", mainFrame)
+toggleButton.Size = UDim2.new(0, 246, 0, 40)
+toggleButton.Position = UDim2.new(0, 12, 0, 395)
 toggleButton.Text = "[ SYSTEM: INACTIVE ]"
 toggleButton.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
 toggleButton.TextColor3 = Color3.fromRGB(255, 80, 80)
@@ -426,24 +364,9 @@ runService.Heartbeat:Connect(function()
             elseif _G.HimxConfig.posState == "Above" then offset = tRoot.CFrame.UpVector * _G.HimxConfig.currentDistance end
             root.CFrame = CFrame.new(tRoot.Position + offset, tRoot.Position)
             if not _G.HimxConfig.FlingMode then
-                root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
-            end
-        end
-    end
-end)
+root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
 
-task.spawn(function()
-    while true do
-        for i = 0, 1, 0.02 do
-            if not screenGui:FindFirstChild("MasterFrame") then break end
-            local mf = screenGui.MasterFrame
-            local wave = math.sin(i * math.pi)
-            local color = Color3.fromRGB(0, 130 + (wave * 125), 50 + (wave * 50))
-            if mf:FindFirstChild("LeftOuter") and mf:FindFirstChild("RightOuter") then
-                mf.LeftOuter.BackgroundColor3 = color
-                mf.RightOuter.BackgroundColor3 = color
             end
-            task.wait(0.04)
         end
     end
 end)
