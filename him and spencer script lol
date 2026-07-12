@@ -1,0 +1,434 @@
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+
+_G.HimxConfig = _G.HimxConfig or {
+    isLooping = false, currentDistance = 3.5, posState = "Back",
+    minDistance = -20, maxDistance = 50, isSliding = false, targetText = "",
+    useRecall = true, savedPosition = nil, viewPlayer = false
+}
+_G.SpencerResetConfig = _G.SpencerResetConfig or {
+    autoResetActive = false, antiVoidActive = true, lastHealth = 100
+}
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "Himx_Spencer_Unified_V6"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+if syn and syn.protect_gui then
+    syn.protect_gui(screenGui)
+    screenGui.Parent = game:GetService("CoreGui")
+else
+    screenGui.Parent = localPlayer:WaitForChild("PlayerGui")
+end
+
+local masterFrame = Instance.new("Frame")
+masterFrame.Name = "MasterFrame"
+masterFrame.Size = UDim2.new(0, 514, 0, 314)
+masterFrame.Position = UDim2.new(0.5, -257, 0.4, -157)
+masterFrame.BackgroundTransparency = 1
+masterFrame.Active = true
+masterFrame.Draggable = true
+masterFrame.ClipsDescendants = true
+masterFrame.Parent = screenGui
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+local masterFrame = screenGui:WaitForChild("MasterFrame")
+
+local leftOuter = Instance.new("Frame", masterFrame)
+leftOuter.Name = "LeftOuter"
+leftOuter.Size = UDim2.new(0, 264, 0, 314)
+leftOuter.Position = UDim2.new(0, 0, 0, 0)
+leftOuter.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+leftOuter.BorderSizePixel = 0
+Instance.new("UICorner", leftOuter).CornerRadius = UDim.new(0, 10)
+
+local leftMain = Instance.new("Frame", leftOuter)
+leftMain.Name = "LeftMain"
+leftMain.Size = UDim2.new(0, 260, 0, 310)
+leftMain.Position = UDim2.new(0, 2, 0, 2)
+leftMain.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+leftMain.BorderSizePixel = 0
+Instance.new("UICorner", leftMain).CornerRadius = UDim.new(0, 8)
+
+local title = Instance.new("TextLabel", leftMain)
+title.Name = "TitleText"
+title.Size = UDim2.new(0, 185, 0, 35)
+title.Position = UDim2.new(0, 10, 0, 0)
+title.Text = "/// Himx1x1x1 Zero Ping V5"
+title.TextColor3 = Color3.fromRGB(0, 255, 100)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.Code
+title.TextSize = 12
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+local masterFrame = screenGui:WaitForChild("MasterFrame")
+local leftMain = masterFrame.LeftOuter.LeftMain
+
+local textBox = Instance.new("TextBox", leftMain)
+textBox.Name = "TextBox"
+textBox.Size = UDim2.new(0.9, 0, 0, 30)
+textBox.Position = UDim2.new(0.05, 0, 0.14, 0)
+textBox.PlaceholderText = "> ENTER TARGET ID/NAME"
+textBox.Text = ""
+textBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+textBox.Font = Enum.Font.Code
+textBox.TextSize = 12
+textBox.BorderSizePixel = 1
+textBox.BorderColor3 = Color3.fromRGB(50, 50, 50)
+Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 4)
+
+textBox:GetPropertyChangedSignal("Text"):Connect(function() _G.HimxConfig.targetText = textBox.Text end)
+
+local rightOuter = Instance.new("Frame", masterFrame)
+rightOuter.Name = "RightOuter"
+rightOuter.Size = UDim2.new(0, 250, 0, 110)
+rightOuter.Position = UDim2.new(0, 264, 0, 0)
+rightOuter.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+rightOuter.BorderSizePixel = 0
+Instance.new("UICorner", rightOuter).CornerRadius = UDim.new(0, 10)
+
+local rightMain = Instance.new("Frame", rightOuter)
+rightMain.Name = "RightMain"
+rightMain.Size = UDim2.new(0, 246, 0, 106)
+rightMain.Position = UDim2.new(0, 2, 0, 2)
+rightMain.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+rightMain.BorderSizePixel = 0
+Instance.new("UICorner", rightMain).CornerRadius = UDim.new(0, 8)
+
+local rTitle = Instance.new("TextLabel", rightMain)
+rTitle.Name = "RTitleText"
+rTitle.Size = UDim2.new(1, 0, 0, 35)
+rTitle.Position = UDim2.new(0, 10, 0, 0)
+rTitle.Text = "Himx1x1x1 Custom Made by Spencer"
+rTitle.TextColor3 = Color3.fromRGB(0, 255, 100)
+rTitle.BackgroundTransparency = 1
+rTitle.Font = Enum.Font.Code
+rTitle.TextSize = 11
+rTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+local leftMain = screenGui.MasterFrame.LeftOuter.LeftMain
+
+local sliderLabel = Instance.new("TextLabel", leftMain)
+sliderLabel.Size = UDim2.new(0.9, 0, 0, 20)
+sliderLabel.Position = UDim2.new(0.05, 0, 0.40, 0)
+sliderLabel.Text = "OFFSET RANGE: 3.5 STUDS"
+sliderLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+sliderLabel.BackgroundTransparency = 1
+sliderLabel.Font = Enum.Font.Code
+sliderLabel.TextSize = 12
+sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+_G.HimxUpdateLabel = function(val) sliderLabel.Text = "OFFSET RANGE: " .. tostring(val) .. " STUDS" end
+
+local sliderTrack = Instance.new("Frame", leftMain)
+sliderTrack.Name = "SliderTrack"
+sliderTrack.Size = UDim2.new(0, 234, 0, 8)
+sliderTrack.Position = UDim2.new(0, 13, 0, 150)
+sliderTrack.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
+Instance.new("UICorner", sliderTrack).CornerRadius = UDim.new(0, 4)
+Instance.new("UIStroke", sliderTrack).Color = Color3.fromRGB(0, 255, 100)
+
+local sliderHandle = Instance.new("TextButton", sliderTrack)
+sliderHandle.Name = "SliderHandle"
+sliderHandle.Size = UDim2.new(0, 14, 0, 18)
+sliderHandle.Position = UDim2.new(0.335, -7, 0.5, -9) 
+sliderHandle.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+sliderHandle.Text = ""
+Instance.new("UICorner", sliderHandle).CornerRadius = UDim.new(0, 4)
+
+local function processSliderMovement(input)
+    local relativeX = math.clamp((input.Position.X - sliderTrack.AbsolutePosition.X) / sliderTrack.AbsoluteSize.X, 0, 1)
+    sliderHandle.Position = UDim2.new(relativeX, -7, 0.5, -9)
+    local raw = _G.HimxConfig.minDistance + (relativeX * (_G.HimxConfig.maxDistance - _G.HimxConfig.minDistance))
+    _G.HimxConfig.currentDistance = math.floor(raw * 10) / 10
+    if _G.HimxUpdateLabel then _G.HimxUpdateLabel(_G.HimxConfig.currentDistance) end
+end
+
+sliderHandle.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = true end end)
+game:GetService("UserInputService").InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = false end end)
+game:GetService("UserInputService").InputChanged:Connect(function(input) if _G.HimxConfig.isSliding and input.UserInputType == Enum.UserInputType.MouseMovement then processSliderMovement(input) end end)
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+local leftMain = screenGui.MasterFrame.LeftOuter.LeftMain
+local cfg = _G.HimxConfig
+
+local function styleButton(btn, active)
+    btn.BackgroundColor3 = active and Color3.fromRGB(0, 100, 40) or Color3.fromRGB(25, 25, 25)
+    btn.BorderColor3 = active and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(60, 60, 60)
+    btn.TextColor3 = active and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(150, 150, 150)
+end
+
+local backBtn = Instance.new("TextButton", leftMain)
+backBtn.Name = "BackBtn"
+backBtn.Size = UDim2.new(0, 72, 0, 30)
+backBtn.Position = UDim2.new(0, 13, 0, 84)
+backBtn.Text = "BACK"
+backBtn.Font = Enum.Font.Code
+styleButton(backBtn, true)
+Instance.new("UICorner", backBtn).CornerRadius = UDim.new(0, 4)
+
+local frontBtn = Instance.new("TextButton", leftMain)
+frontBtn.Name = "FrontBtn"
+frontBtn.Size = UDim2.new(0, 72, 0, 30)
+frontBtn.Position = UDim2.new(0, 94, 0, 84)
+frontBtn.Text = "FRONT"
+frontBtn.Font = Enum.Font.Code
+styleButton(frontBtn, false)
+Instance.new("UICorner", frontBtn).CornerRadius = UDim.new(0, 4)
+
+local aboveBtn = Instance.new("TextButton", leftMain)
+aboveBtn.Name = "AboveBtn"
+aboveBtn.Size = UDim2.new(0, 72, 0, 30)
+aboveBtn.Position = UDim2.new(0, 175, 0, 84)
+aboveBtn.Text = "ABOVE"
+aboveBtn.Font = Enum.Font.Code
+styleButton(aboveBtn, false)
+Instance.new("UICorner", aboveBtn).CornerRadius = UDim.new(0, 4)
+
+local function updatePositionPreset(state)
+    cfg.posState = state
+    styleButton(backBtn, state == "Back")
+    styleButton(frontBtn, state == "Front")
+    styleButton(aboveBtn, state == "Above")
+end
+
+backBtn.MouseButton1Click:Connect(function() updatePositionPreset("Back") end)
+frontBtn.MouseButton1Click:Connect(function() updatePositionPreset("Front") end)
+aboveBtn.MouseButton1Click:Connect(function() updatePositionPreset("Above") end)
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+local leftMain = screenGui.MasterFrame.LeftOuter.LeftMain
+local rightMain = screenGui.MasterFrame.RightOuter.RightMain
+local cfg = _G.HimxConfig
+local rcfg = _G.SpencerResetConfig
+
+local recallButton = Instance.new("TextButton", leftMain)
+recallButton.Name = "RecallToggle"
+recallButton.Size = UDim2.new(0, 112, 0, 30)
+recallButton.Position = UDim2.new(0, 13, 0, 195)
+recallButton.Text = "REWIND: ON"
+recallButton.BackgroundColor3 = Color3.fromRGB(0, 100, 40)
+recallButton.TextColor3 = Color3.fromRGB(0, 255, 100)
+recallButton.Font = Enum.Font.Code
+Instance.new("UICorner", recallButton).CornerRadius = UDim.new(0, 4)
+
+recallButton.MouseButton1Click:Connect(function()
+    cfg.useRecall = not cfg.useRecall
+    recallButton.Text = cfg.useRecall and "REWIND: ON" or "REWIND: OFF"
+    recallButton.BackgroundColor3 = cfg.useRecall and Color3.fromRGB(0, 100, 40) or Color3.fromRGB(30, 30, 30)
+    recallButton.TextColor3 = cfg.useRecall and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
+end)
+
+local viewButton = Instance.new("TextButton", leftMain)
+viewButton.Name = "ViewToggle"
+viewButton.Size = UDim2.new(0, 112, 0, 30)
+viewButton.Position = UDim2.new(0, 135, 0, 195)
+viewButton.Text = "VIEW: OFF"
+viewButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+viewButton.TextColor3 = Color3.fromRGB(150, 150, 150)
+viewButton.Font = Enum.Font.Code
+Instance.new("UICorner", viewButton).CornerRadius = UDim.new(0, 4)
+
+local function resetCam()
+    local cam = game:GetService("Workspace").CurrentCamera
+    if cam and localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then cam.CameraSubject = localPlayer.Character.Humanoid end
+end
+
+viewButton.MouseButton1Click:Connect(function()
+    cfg.viewPlayer = not cfg.viewPlayer
+    viewButton.Text = cfg.viewPlayer and "VIEW: ON" or "VIEW: OFF"
+    viewButton.BackgroundColor3 = cfg.viewPlayer and Color3.fromRGB(0, 100, 40) or Color3.fromRGB(30, 30, 30)
+    viewButton.TextColor3 = cfg.viewPlayer and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
+    if not cfg.viewPlayer then resetCam() end
+end)
+
+local toggleResetBtn = Instance.new("TextButton", rightMain)
+toggleResetBtn.Name = "ResetToggle"
+toggleResetBtn.Size = UDim2.new(0, 108, 0, 40)
+toggleResetBtn.Position = UDim2.new(0, 13, 0, 45)
+toggleResetBtn.Text = "RESET: OFF"
+toggleResetBtn.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
+toggleResetBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
+toggleResetBtn.Font = Enum.Font.Code
+Instance.new("UICorner", toggleResetBtn).CornerRadius = UDim.new(0, 4)
+
+toggleResetBtn.MouseButton1Click:Connect(function()
+    rcfg.autoResetActive = not rcfg.autoResetActive
+    toggleResetBtn.Text = rcfg.autoResetActive and "RESET: ON" or "RESET: OFF"
+    toggleResetBtn.BackgroundColor3 = rcfg.autoResetActive and Color3.fromRGB(15, 40, 15) or Color3.fromRGB(40, 15, 15)
+    toggleResetBtn.TextColor3 = rcfg.autoResetActive and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 80, 80)
+    if rcfg.autoResetActive and localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then rcfg.lastHealth = localPlayer.Character.Humanoid.Health end
+end)
+
+local voidButton = Instance.new("TextButton", rightMain)
+voidButton.Name = "VoidToggle"
+voidButton.Size = UDim2.new(0, 108, 0, 40)
+voidButton.Position = UDim2.new(0, 125, 0, 45)
+voidButton.Text = "INF VOID: ON"
+voidButton.BackgroundColor3 = Color3.fromRGB(15, 40, 15)
+voidButton.TextColor3 = Color3.fromRGB(0, 255, 100)
+voidButton.Font = Enum.Font.Code
+Instance.new("UICorner", voidButton).CornerRadius = UDim.new(0, 4)
+
+voidButton.MouseButton1Click:Connect(function()
+    rcfg.antiVoidActive = not rcfg.antiVoidActive
+    voidButton.Text = rcfg.antiVoidActive and "INF VOID: ON" or "INF VOID: OFF"
+    voidButton.BackgroundColor3 = rcfg.antiVoidActive and Color3.fromRGB(15, 40, 15) or Color3.fromRGB(40, 15, 15)
+    voidButton.TextColor3 = rcfg.antiVoidActive and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
+end)
+
+local toggleButton = Instance.new("TextButton", leftMain)
+toggleButton.Name = "SystemToggle"
+toggleButton.Size = UDim2.new(0, 234, 0, 35)
+toggleButton.Position = UDim2.new(0, 13, 0, 250)
+toggleButton.Text = "[ SYSTEM: INACTIVE ]"
+toggleButton.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
+toggleButton.TextColor3 = Color3.fromRGB(255, 80, 80)
+toggleButton.Font = Enum.Font.Code
+Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 4)
+
+toggleButton.MouseButton1Click:Connect(function()
+    cfg.isLooping = not cfg.isLooping
+    if cfg.isLooping then
+        if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then cfg.savedPosition = localPlayer.Character.HumanoidRootPart.CFrame end
+        toggleButton.Text, toggleButton.BackgroundColor3, toggleButton.TextColor3 = "[ SYSTEM: ACTIVE ]", Color3.fromRGB(15, 40, 15), Color3.fromRGB(0, 255, 100)
+    else
+        toggleButton.Text, toggleButton.BackgroundColor3, toggleButton.TextColor3 = "[ SYSTEM: INACTIVE ]", Color3.fromRGB(40, 15, 15), Color3.fromRGB(255, 80, 80)
+        resetCam()
+        if cfg.useRecall and cfg.savedPosition and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            task.wait(0.02) localPlayer.Character.HumanoidRootPart.CFrame = cfg.savedPosition
+            localPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity, localPlayer.Character.HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+        end
+    end
+end)
+
+local players = game:GetService("Players")
+local runService = game:GetService("RunService")
+local localPlayer = players.LocalPlayer
+local workspace = game:GetService("Workspace")
+local cfg = _G.HimxConfig
+local rcfg = _G.SpencerResetConfig
+
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+
+local function getTarget()
+    if cfg.targetText == "" then return nil end
+    local search = string.lower(cfg.targetText)
+    for _, p in pairs(players:GetPlayers()) do
+        if p ~= localPlayer and p.Name ~= localPlayer.Name then
+            if string.find(string.lower(p.Name), search) or string.find(string.lower(p.DisplayName), search) then return p end
+        end
+    end
+    return nil
+end
+
+runService.RenderStepped:Connect(function()
+    local cam = workspace.CurrentCamera
+    if not cam then return end
+    local target = getTarget()
+    if cfg.viewPlayer and target and target.Character and target.Character:FindFirstChild("Humanoid") then
+        cam.CameraType = Enum.CameraType.Custom
+        cam.CameraSubject = target.Character.Humanoid
+    else
+        if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") and cam.CameraSubject ~= localPlayer.Character.Humanoid and not cfg.viewPlayer then
+            cam.CameraSubject = localPlayer.Character.Humanoid
+        end
+    end
+end)
+
+runService.Heartbeat:Connect(function()
+    local char = localPlayer.Character
+    if not char then return end
+    local hum, root, cam = char:FindFirstChild("Humanoid"), char:FindFirstChild("HumanoidRootPart"), workspace.CurrentCamera
+    
+    if rcfg.antiVoidActive and hum and root and hum.Health > 0 then
+        if root.Position.Y < -350 then
+            if not _G.HimxIsPhantomActive then _G.HimxIsPhantomActive = true _G.HimxPhantomY = root.Position.Y cam.CameraType = Enum.CameraType.Scriptable end
+            root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+            root.CFrame = CFrame.new(root.Position.X, -350, root.Position.Z)
+            _G.HimxPhantomY = _G.HimxPhantomY - 4
+            cam.CFrame = CFrame.new(root.Position.X, _G.HimxPhantomY + 10, root.Position.Z + 20) * CFrame.Angles(math.rad(-25), 0, 0)
+        else
+            if _G.HimxIsPhantomActive then _G.HimxIsPhantomActive = false cam.CameraType = Enum.CameraType.Custom if hum then cam.CameraSubject = hum end end
+        end
+    else
+        if _G.HimxIsPhantomActive then _G.HimxIsPhantomActive = false cam.CameraType = Enum.CameraType.Custom if hum then cam.CameraSubject = hum end end
+    end
+    
+    if rcfg.autoResetActive and hum and hum.Health > 0 then
+        if hum.Health < rcfg.lastHealth then hum.Health = 0 rcfg.lastHealth = 100 else rcfg.lastHealth = hum.Health end
+    else rcfg.lastHealth = 100 end
+    
+    if not cfg.isLooping then return end
+    local target = getTarget()
+    if target and target.Character and root then
+        local tRoot = target.Character:FindFirstChild("HumanoidRootPart")
+        if tRoot then
+            local offset = Vector3.zero
+            if cfg.posState == "Front" then offset = tRoot.CFrame.LookVector * cfg.currentDistance
+            elseif cfg.posState == "Back" then offset = tRoot.CFrame.LookVector * -cfg.currentDistance
+            elseif cfg.posState == "Above" then offset = tRoot.CFrame.UpVector * cfg.currentDistance end
+            root.CFrame = CFrame.new(tRoot.Position + offset, tRoot.Position)
+            root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+        end
+    end
+end)
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local screenGui = localPlayer:WaitForChild("PlayerGui"):WaitForChild("Himx_Spencer_Unified_V6")
+local masterFrame = screenGui:WaitForChild("MasterFrame")
+local tweenService = game:GetService("TweenService")
+
+local leftMain = masterFrame.LeftOuter.LeftMain
+local rightMain = masterFrame.RightOuter.RightMain
+local controlButton = masterFrame.ControlToggle
+
+local menuVisible = true
+
+controlButton.MouseButton1Click:Connect(function()
+    menuVisible = not menuVisible
+    
+    local targetH = menuVisible and 314 or 39
+    local targetLeftH = menuVisible and 314 or 39
+    local targetLeftMH = menuVisible and 310 or 35
+    local targetRightH = menuVisible and 110 or 39
+    local targetRightMH = menuVisible and 106 or 35
+    
+    controlButton.Text = menuVisible and "[ HIDE ]" or "[ SHOW ]"
+    controlButton.TextColor3 = menuVisible and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
+    
+    for _, obj in pairs(leftMain:GetChildren()) do if obj.Name ~= "TitleText" then obj.Visible = menuVisible end end
+    for _, obj in pairs(rightMain:GetChildren()) do if obj.Name ~= "RTitleText" then obj.Visible = menuVisible end end
+    
+    local tInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    tweenService:Create(masterFrame, tInfo, {Size = UDim2.new(0, 514, 0, targetH)}):Play()
+    tweenService:Create(masterFrame.LeftOuter, tInfo, {Size = UDim2.new(0, 264, 0, targetLeftH)}):Play()
+    tweenService:Create(masterFrame.LeftOuter.LeftMain, tInfo, {Size = UDim2.new(0, 260, 0, targetLeftMH)}):Play()
+    tweenService:Create(masterFrame.RightOuter, tInfo, {Size = UDim2.new(0, 250, 0, targetRightH)}):Play()
+    tweenService:Create(masterFrame.RightOuter.RightMain, tInfo, {Size = UDim2.new(0, 246, 0, targetRightMH)}):Play()
+end)
+
+task.spawn(function()
+    while true do
+        for i = 0, 1, 0.02 do
+            if not screenGui:FindFirstChild("MasterFrame") then break end
+            local mf = screenGui.MasterFrame
+            local wave = math.sin(i * math.pi)
+            local color = Color3.fromRGB(0, 130 + (wave * 125), 50 + (wave * 50))
+            if mf:FindFirstChild("LeftOuter") and mf:FindFirstChild("RightOuter") then
+                mf.LeftOuter.BackgroundColor3 = color
+                mf.RightOuter.BackgroundColor3 = color
+            end
+            task.wait(0.04)
+        end
+    end
+end)
