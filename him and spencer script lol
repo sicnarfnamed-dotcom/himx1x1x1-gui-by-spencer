@@ -35,6 +35,11 @@ outerFrame.BorderSizePixel = 0
 outerFrame.Active = true
 outerFrame.Draggable = true
 outerFrame.ClipsDescendants = true
+
+local outerCorner = Instance.new("UICorner")
+outerCorner.CornerRadius = UDim.new(0, 10)
+outerCorner.Parent = outerFrame
+
 outerFrame.Parent = screenGui
 
 local mainFrame = Instance.new("Frame", outerFrame)
@@ -391,19 +396,47 @@ end)
 local phantomY, isPhantomActive = 0, false
 
 runService.RenderStepped:Connect(function()
+
     local cam = workspace.CurrentCamera
     if not cam then return end
-    local target = getTarget()
-    if _G.HimxConfig.viewPlayer and target and target.Character and target.Character:FindFirstChild("Humanoid") then
-        cam.CameraType = Enum.CameraType.Custom
-        cam.CameraSubject = target.Character.Humanoid
-    else
-        if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") and cam.CameraSubject ~= localPlayer.Character.Humanoid and not _G.HimxConfig.viewPlayer then
-            cam.CameraSubject = localPlayer.Character.Humanoid
-        end
-    end
-end)
 
+    if _G.HimxConfig.viewPlayer then
+
+        local target = getTarget()
+
+        if target then
+
+            local character = target.Character
+
+            if character then
+
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+
+                if humanoid then
+
+                    if cam.CameraSubject ~= humanoid then
+                        cam.CameraType = Enum.CameraType.Custom
+                        cam.CameraSubject = humanoid
+                    end
+
+                end
+
+            end
+
+        end
+
+    else
+
+        local myHumanoid = localPlayer.Character and localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+
+        if myHumanoid and cam.CameraSubject ~= myHumanoid then
+            cam.CameraType = Enum.CameraType.Custom
+            cam.CameraSubject = myHumanoid
+        end
+
+    end
+
+end)
 runService.Heartbeat:Connect(function()
     local char = localPlayer.Character
     if not char then return end
