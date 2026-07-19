@@ -10,8 +10,7 @@ _G.HimxConfig = _G.HimxConfig or {
     minDistance = -20, maxDistance = 50, isSliding = false, targetText = "",
     useRecall = true, savedPosition = nil, viewPlayer = false, FlingMode = false,
     InfPosActive = false, InfPosCF = nil, PartText = "", PartLoopActive = false,
-    PartLoopSpeed = 0.005, isPartSliding = false,
-    ResizeActive = false -- NEW: Manual window resizing variable state
+    PartLoopSpeed = 0.005, isPartSliding = false, ResizeActive = false
 }
 _G.SpencerResetConfig = _G.SpencerResetConfig or {
     autoResetActive = false, antiVoidActive = true, lastHealth = 100
@@ -73,11 +72,10 @@ Instance.new("UICorner", hideButton).CornerRadius = UDim.new(0, 4)
 local hideStroke = Instance.new("UIStroke", hideButton)
 hideStroke.Color = Color3.fromRGB(0, 255, 100)
 
--- NEW: High-Priority [R] Resize Window Button Injector Module (Sits directly on the left of [-])
 local resizeButton = Instance.new("TextButton", mainFrame)
 resizeButton.Name = "ResizeButton"
 resizeButton.Size = UDim2.new(0, 30, 0, 18)
-resizeButton.Position = UDim2.new(1, -78, 0, 10) -- Nested seamlessly left of the minimize anchor point
+resizeButton.Position = UDim2.new(1, -78, 0, 10)
 resizeButton.Text = "[R]"
 resizeButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 resizeButton.TextColor3 = Color3.fromRGB(150, 150, 150)
@@ -89,7 +87,7 @@ resizeStroke.Color = Color3.fromRGB(60, 60, 60)
 
 local menuVisible = true
 hideButton.MouseButton1Click:Connect(function()
-    if _G.HimxConfig.ResizeActive then return end -- Locks scaling engine safely while adjustments are ongoing
+    if _G.HimxConfig.ResizeActive then return end
     menuVisible = not menuVisible
     local currentWidth = outerFrame.Size.X.Offset
     local targetOuterH = menuVisible and 480 or 39
@@ -116,7 +114,6 @@ rightContent.Position = UDim2.new(0.5, 2, 0, 40)
 rightContent.BackgroundTransparency = 1
 
 local textBox = Instance.new("TextBox", leftContent)
-textBox.Name = "TextBox"
 textBox.Size = UDim2.new(1, 0, 0, 30)
 textBox.Position = UDim2.new(0, 0, 0, 0)
 textBox.PlaceholderText = "> ENTER TARGET ID/NAME"
@@ -168,74 +165,6 @@ updatePositionPreset("Back", backBtn)
 backBtn.MouseButton1Click:Connect(function() updatePositionPreset("Back", backBtn) end)
 frontBtn.MouseButton1Click:Connect(function() updatePositionPreset("Front", frontBtn) end)
 aboveBtn.MouseButton1Click:Connect(function() updatePositionPreset("Above", aboveBtn) end)
-
-local sliderLabel = Instance.new("TextLabel", leftContent)
-sliderLabel.Size = UDim2.new(1, 0, 0, 20)
-sliderLabel.Position = UDim2.new(0, 0, 0, 85)
-sliderLabel.Text = "OFFSET RANGE: 3.5 STUDS"
-sliderLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-sliderLabel.BackgroundTransparency = 1
-sliderLabel.Font = Enum.Font.Code
-sliderLabel.TextSize = 11
-sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-_G.HimxUpdateLabel = function(val) sliderLabel.Text = "OFFSET RANGE: " .. tostring(val) .. " STUDS" end
-
-local sliderTrack = Instance.new("Frame", leftContent)
-sliderTrack.Size = UDim2.new(1, 0, 0, 6)
-sliderTrack.Position = UDim2.new(0, 0, 0, 110)
-sliderTrack.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
-Instance.new("UICorner", sliderTrack).CornerRadius = UDim.new(0, 3)
-Instance.new("UIStroke", sliderTrack).Color = Color3.fromRGB(0, 255, 100)
-
-local sliderHandle = Instance.new("TextButton", sliderTrack)
-sliderHandle.Size = UDim2.new(0, 12, 0, 16)
-sliderHandle.Position = UDim2.new(0.335, -6, 0.5, -8) 
-sliderHandle.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
-sliderHandle.Text = ""
-Instance.new("UICorner", sliderHandle).CornerRadius = UDim.new(0, 3)
-
-local function processSliderMovement(input)
-    local relativeX = math.clamp((input.Position.X - sliderTrack.AbsolutePosition.X) / sliderTrack.AbsoluteSize.X, 0, 1)
-    sliderHandle.Position = UDim2.new(relativeX, -6, 0.5, -8)
-    local raw = _G.HimxConfig.minDistance + (relativeX * (_G.HimxConfig.maxDistance - _G.HimxConfig.minDistance))
-    _G.HimxConfig.currentDistance = math.floor(raw * 10) / 10
-    if _G.HimxUpdateLabel then _G.HimxUpdateLabel(_G.HimxConfig.currentDistance) end
-end
-
-sliderHandle.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = true end end)
-game:GetService("UserInputService").InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isSliding = false end end)
-game:GetService("UserInputService").InputChanged:Connect(function(input) if _G.HimxConfig.isSliding and input.UserInputType == Enum.UserInputType.MouseMovement then processSliderMovement(input) end end)
-
-local recallButton = Instance.new("TextButton", leftContent)
-recallButton.Size = UDim2.new(0.48, 0, 0, 30)
-recallButton.Position = UDim2.new(0, 0, 0, 130)
-recallButton.Text = "REWIND: ON"
-recallButton.BackgroundColor3 = Color3.fromRGB(0, 40, 15)
-recallButton.TextColor3 = Color3.fromRGB(0, 255, 100)
-recallButton.Font = Enum.Font.Code
-Instance.new("UICorner", recallButton).CornerRadius = UDim.new(0, 4)
-local p4RecStroke = Instance.new("UIStroke", recallButton)
-p4RecStroke.Color = Color3.fromRGB(0, 255, 100)
-
-recallButton.MouseButton1Click:Connect(function()
-    _G.HimxConfig.useRecall = not _G.HimxConfig.useRecall
-    recallButton.Text = _G.HimxConfig.useRecall and "REWIND: ON" or "REWIND: OFF"
-    recallButton.BackgroundColor3 = _G.HimxConfig.useRecall and Color3.fromRGB(0, 40, 15) or Color3.fromRGB(25, 25, 25)
-    recallButton.TextColor3 = _G.HimxConfig.useRecall and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
-    p4RecStroke.Color = _G.HimxConfig.useRecall and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(60, 60, 60)
-end)
-
-local viewButton = Instance.new("TextButton", leftContent)
-viewButton.Size = UDim2.new(0.48, 0, 0, 30)
-viewButton.Position = UDim2.new(0.52, 0, 0, 130)
-viewButton.Text = "VIEW: OFF"
-viewButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-viewButton.TextColor3 = Color3.fromRGB(150, 150, 150)
-viewButton.Font = Enum.Font.Code
-Instance.new("UICorner", viewButton).CornerRadius = UDim.new(0, 4)
-local p4ViewStroke = Instance.new("UIStroke", viewButton)
-p4ViewStroke.Color = Color3.fromRGB(60, 60, 60)
 
 local toggleButton = Instance.new("TextButton", leftContent)
 toggleButton.Name = "SystemToggle"
@@ -325,7 +254,6 @@ Instance.new("UICorner", flingButton).CornerRadius = UDim.new(0, 4)
 local flingStroke = Instance.new("UIStroke", flingButton)
 flingStroke.Color = Color3.fromRGB(255, 50, 50)
 
--- RIGHT PANEL FARMING UNIT COMPONENTS
 local partTextBox = Instance.new("TextBox", rightContent)
 partTextBox.Name = "PartTextBox"
 partTextBox.Size = UDim2.new(1, 0, 0, 30)
@@ -392,9 +320,7 @@ Instance.new("UICorner", partToggleButton).CornerRadius = UDim.new(0, 4)
 local partStroke = Instance.new("UIStroke", partToggleButton)
 partStroke.Color = Color3.fromRGB(255, 50, 50)
 
-local dragStart, startPos, dragInput
 local function setupAllEdgeResizers()
-    -- Dynamic edge tracking algorithms to intercept grabs along border walls
     resizeButton.MouseButton1Click:Connect(function()
         _G.HimxConfig.ResizeActive = not _G.HimxConfig.ResizeActive
         resizeButton.Text = _G.HimxConfig.ResizeActive and "Resize: Active" or "[R]"
@@ -402,18 +328,14 @@ local function setupAllEdgeResizers()
         resizeButton.Position = _G.HimxConfig.ResizeActive and UDim2.new(1, -143, 0, 10) or UDim2.new(1, -78, 0, 10)
         resizeButton.TextColor3 = _G.HimxConfig.ResizeActive and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
         resizeStroke.Color = resizeButton.TextColor3
-        outerFrame.Active = not _G.HimxConfig.ResizeActive -- Disables default frame dragging while wall-sizing is live!
+        outerFrame.Active = not _G.HimxConfig.ResizeActive
     end)
-    
     userInputService.InputChanged:Connect(function(input)
         if _G.HimxConfig.ResizeActive and input.UserInputType == Enum.UserInputType.MouseMovement and userInputService:IsMouseButtonPressed(Enum.MouseButton1) then
             local mousePos = userInputService:GetMouseLocation()
             local distanceX = mousePos.X - outerFrame.AbsolutePosition.X
             local distanceY = mousePos.Y - outerFrame.AbsolutePosition.Y - 36
-            -- Adaptive structural constraints to prevent collapsing into zero boundaries
-            local finalWidth = math.max(260, distanceX)
-            local finalHeight = math.max(180, distanceY)
-            outerFrame.Size = UDim2.new(0, finalWidth, 0, finalHeight)
+            outerFrame.Size = UDim2.new(0, math.max(320, distanceX), 0, math.max(180, distanceY))
         end
     end)
 end
@@ -474,13 +396,21 @@ toggleButton.MouseButton1Click:Connect(function()
     else
         toggleButton.Text, toggleButton.BackgroundColor3, toggleButton.TextColor3 = "[ SYSTEM: INACTIVE ]", Color3.fromRGB(40, 15, 15), Color3.fromRGB(255, 80, 80)
         if _G.HimxResetCamGlobal then _G.HimxResetCamGlobal() end
-        if _G.HimxConfig.useRecall and _G.HimxConfig.savedPosition and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        if _G.HimxConfig.useRecall and _G.HimxConfig.savedPosition then
             task.wait(0.02) localPlayer.Character.HumanoidRootPart.CFrame = _G.HimxConfig.savedPosition
             localPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
             localPlayer.Character.HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
         end
     end
     sysStroke.Color = toggleButton.TextColor3
+end)
+
+recallButton.MouseButton1Click:Connect(function()
+    _G.HimxConfig.useRecall = not _G.HimxConfig.useRecall
+    recallButton.Text = _G.HimxConfig.useRecall and "REWIND: ON" or "REWIND: OFF"
+    recallButton.BackgroundColor3 = _G.HimxConfig.useRecall and Color3.fromRGB(0, 40, 15) or Color3.fromRGB(25, 25, 25)
+    recallButton.TextColor3 = _G.HimxConfig.useRecall and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
+    p4RecStroke.Color = _G.HimxConfig.useRecall and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(60, 60, 60)
 end)
 
 partToggleButton.MouseButton1Click:Connect(function()
@@ -533,6 +463,8 @@ runService.RenderStepped:Connect(function()
     end
 end)
 
+local phantomY, isPhantomActive = 0, false
+
 runService.Heartbeat:Connect(function()
     local char = localPlayer.Character
     if not char then return end
@@ -562,94 +494,32 @@ runService.Heartbeat:Connect(function()
     
     if _G.SpencerResetConfig.antiVoidActive and hum.Health > 0 then
         if root.Position.Y < -350 then
-if not _G.HimxIsPhantomActive then
-    _G.HimxIsPhantomActive = true
-    _G.HimxPhantomY = root.Position.Y
-    cam.CameraType = Enum.CameraType.Scriptable
-end
-
-root.AssemblyLinearVelocity = Vector3.zero
-root.AssemblyAngularVelocity = Vector3.zero
-
-root.CFrame = CFrame.new(root.Position.X, -350, root.Position.Z)
-
-_G.HimxPhantomY = _G.HimxPhantomY - 4
-
-cam.CFrame =
-    CFrame.new(
-        root.Position.X,
-        _G.HimxPhantomY + 10,
-        root.Position.Z + 20
-    ) * CFrame.Angles(math.rad(-25), 0, 0)
-
-else
-    if _G.HimxIsPhantomActive then
-        _G.HimxIsPhantomActive = false
-        cam.CameraType = Enum.CameraType.Custom
-
-        if hum then
-            cam.CameraSubject = hum
+            if not isPhantomActive then isPhantomActive = true phantomY = root.Position.Y cam.CameraType = Enum.CameraType.Scriptable end
+            root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+            root.CFrame = CFrame.new(root.Position.X, -350, root.Position.Z)
+            phantomY = phantomY - 4
+            cam.CFrame = CFrame.new(root.Position.X, phantomY + 10, root.Position.Z + 20) * CFrame.Angles(math.rad(-25), 0, 0)
+        else
+            if isPhantomActive then isPhantomActive = false cam.CameraType = Enum.CameraType.Custom if hum then cam.CameraSubject = hum end end
         end
-    end
-end
-
-if _G.SpencerResetConfig.autoResetActive and hum.Health > 0 then
-    if hum.Health < _G.SpencerResetConfig.lastHealth then
-        hum.Health = 0
-        _G.SpencerResetConfig.lastHealth = 100
     else
-        _G.SpencerResetConfig.lastHealth = hum.Health
+        if isPhantomActive then isPhantomActive = false cam.CameraType = Enum.CameraType.Custom if hum then cam.CameraSubject = hum end end
     end
-else
-    _G.SpencerResetConfig.lastHealth = 100
-end
-
-if not _G.HimxConfig.isLooping or _G.HimxConfig.InfPosActive then
-    return
-end
-
-if target and target.Character then
-    local tRoot = target.Character:FindFirstChild("HumanoidRootPart")
-
-    if tRoot then
-        local offset = Vector3.zero
-
-        if _G.HimxConfig.posState == "Front" then
-            offset = tRoot.CFrame.LookVector * _G.HimxConfig.currentDistance
-
-        elseif _G.HimxConfig.posState == "Back" then
-            offset = tRoot.CFrame.LookVector * -_G.HimxConfig.currentDistance
-
-        elseif _G.HimxConfig.posState == "Above" then
-            offset = tRoot.CFrame.UpVector * _G.HimxConfig.currentDistance
-        end
-
-        root.CFrame = CFrame.new(tRoot.Position + offset, tRoot.Position)
-
-        if not _G.HimxConfig.FlingMode then
-            root.AssemblyLinearVelocity = Vector3.zero
-            root.AssemblyAngularVelocity = Vector3.zero
-        end
-    end
-end
-end)
-
-task.spawn(function()
-    while true do
-        for i = 0, 1, 0.02 do
-            if not screenGui:FindFirstChild("OuterFrame") then
-                break
-            end
-
-            local wave = math.sin(i * math.pi)
-
-            screenGui.OuterFrame.BackgroundColor3 = Color3.fromRGB(
-                0,
-                130 + (wave * 125),
-                50 + (wave * 50)
-            )
-
-            task.wait(0.04)
+    
+    if _G.SpencerResetConfig.autoResetActive and hum.Health > 0 then
+        if hum.Health < _G.SpencerResetConfig.lastHealth then hum.Health = 0 _G.SpencerResetConfig.lastHealth = 100 else _G.SpencerResetConfig.lastHealth = hum.Health end
+    else _G.SpencerResetConfig.lastHealth = 100 end
+    
+    if not _G.HimxConfig.isLooping or _G.HimxConfig.InfPosActive then return end
+    if target and target.Character then
+        local tRoot = target.Character:FindFirstChild("HumanoidRootPart")
+        if tRoot then
+            local offset = Vector3.zero
+            if _G.HimxConfig.posState == "Front" then offset = tRoot.CFrame.LookVector * _G.HimxConfig.currentDistance
+            elseif _G.HimxConfig.posState == "Back" then offset = tRoot.CFrame.LookVector * -_G.HimxConfig.currentDistance
+            elseif _G.HimxConfig.posState == "Above" then offset = tRoot.CFrame.UpVector * _G.HimxConfig.currentDistance end
+            root.CFrame = CFrame.new(tRoot.Position + offset, tRoot.Position)
+            if not _G.HimxConfig.FlingMode then root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero end
         end
     end
 end)
