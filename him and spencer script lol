@@ -582,26 +582,15 @@ cam.CFrame =
         root.Position.Z + 20
     ) * CFrame.Angles(math.rad(-25), 0, 0)
 
-elseif _G.HimxIsPhantomActive then
-    _G.HimxIsPhantomActive = false
-    cam.CameraType = Enum.CameraType.Custom
+else
+    if _G.HimxIsPhantomActive then
+        _G.HimxIsPhantomActive = false
+        cam.CameraType = Enum.CameraType.Custom
 
-    if hum then
-        cam.CameraSubject = hum
+        if hum then
+            cam.CameraSubject = hum
+        end
     end
-end
-
-end
-
-elseif _G.HimxIsPhantomActive then
-    _G.HimxIsPhantomActive = false
-    cam.CameraType = Enum.CameraType.Custom
-
-    if hum then
-        cam.CameraSubject = hum
-    end
-end
-
 end
 
 if _G.SpencerResetConfig.autoResetActive and hum.Health > 0 then
@@ -643,7 +632,6 @@ if target and target.Character then
         end
     end
 end
-
 end)
 
 task.spawn(function()
