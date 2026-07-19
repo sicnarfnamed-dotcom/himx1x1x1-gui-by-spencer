@@ -78,9 +78,13 @@ hideButton.MouseButton1Click:Connect(function()
     hideButton.Text = menuVisible and "[-]" or "[+]"
     hideButton.TextColor3 = menuVisible and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
     hideStroke.Color = hideButton.TextColor3
-    for _, obj in pairs(mainFrame:GetChildren()) do
-        if obj.Name ~= "TitleText" and obj.Name ~= "HideButton" then obj.Visible = menuVisible end
+  for _, obj in ipairs(mainFrame:GetChildren()) do
+    if obj:IsA("GuiObject") then
+        if obj.Name ~= "TitleText" and obj.Name ~= "HideButton" then
+            obj.Visible = menuVisible
+        end
     end
+end
     local tInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     tweenService:Create(outerFrame, tInfo, {Size = UDim2.new(0, 514, 0, targetOuterH)}):Play()
     tweenService:Create(mainFrame, tInfo, {Size = UDim2.new(0, 510, 0, targetMainH)}):Play()
