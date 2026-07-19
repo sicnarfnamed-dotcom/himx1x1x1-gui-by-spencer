@@ -71,23 +71,44 @@ local hideStroke = Instance.new("UIStroke", hideButton)
 hideStroke.Color = Color3.fromRGB(0, 255, 100)
 
 local menuVisible = true
+
 hideButton.MouseButton1Click:Connect(function()
+
     menuVisible = not menuVisible
-    local targetOuterH = menuVisible and 480 or 39
-    local targetMainH = menuVisible and 476 or 35
+
     hideButton.Text = menuVisible and "[-]" or "[+]"
-    hideButton.TextColor3 = menuVisible and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
+    hideButton.TextColor3 = menuVisible and Color3.fromRGB(0,255,100) or Color3.fromRGB(255,255,255)
     hideStroke.Color = hideButton.TextColor3
-  for _, obj in ipairs(mainFrame:GetChildren()) do
-    if obj:IsA("GuiObject") then
-        if obj.Name ~= "TitleText" and obj.Name ~= "HideButton" then
-            obj.Visible = menuVisible
+
+    -- Hide everything except title & button
+    for _,obj in ipairs(mainFrame:GetDescendants()) do
+        if obj:IsA("GuiObject") then
+            if obj ~= hideButton and obj ~= title then
+                obj.Visible = menuVisible
+            end
         end
     end
-end
-    local tInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    tweenService:Create(outerFrame, tInfo, {Size = UDim2.new(0, 514, 0, targetOuterH)}):Play()
-    tweenService:Create(mainFrame, tInfo, {Size = UDim2.new(0, 510, 0, targetMainH)}):Play()
+
+    tweenService:Create(
+        outerFrame,
+        TweenInfo.new(.25),
+        {
+            Size = menuVisible
+                and UDim2.new(0,514,0,480)
+                or UDim2.new(0,514,0,39)
+        }
+    ):Play()
+
+    tweenService:Create(
+        mainFrame,
+        TweenInfo.new(.25),
+        {
+            Size = menuVisible
+                and UDim2.new(0,510,0,476)
+                or UDim2.new(0,510,0,35)
+        }
+    ):Play()
+
 end)
 
 local textBox = Instance.new("TextBox", mainFrame)
