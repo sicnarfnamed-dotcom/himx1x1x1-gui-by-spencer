@@ -8,7 +8,8 @@ _G.HimxConfig = _G.HimxConfig or {
     isLooping = false, currentDistance = 3.5, posState = "Back",
     minDistance = -20, maxDistance = 50, isSliding = false, targetText = "",
     useRecall = true, savedPosition = nil, viewPlayer = false, FlingMode = false,
-    InfPosActive = false, InfPosCF = nil, PartText = "", PartLoopActive = false
+    InfPosActive = false, InfPosCF = nil, PartText = "", PartLoopActive = false,
+    PartLoopSpeed = 0.005, isPartSliding = false -- NEW: Part slider telemetry variables
 }
 _G.SpencerResetConfig = _G.SpencerResetConfig or {
     autoResetActive = false, antiVoidActive = true, lastHealth = 100
@@ -28,7 +29,7 @@ end
 
 local outerFrame = Instance.new("Frame")
 outerFrame.Name = "OuterFrame"
-outerFrame.Size = UDim2.new(0, 514, 0, 480) -- Expanded width to 514 to hold dual utility grids perfectly!
+outerFrame.Size = UDim2.new(0, 514, 0, 480)
 outerFrame.Position = UDim2.new(0.5, -257, 0.4, -240)
 outerFrame.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
 outerFrame.BorderSizePixel = 0
@@ -77,13 +78,9 @@ hideButton.MouseButton1Click:Connect(function()
     hideButton.Text = menuVisible and "[-]" or "[+]"
     hideButton.TextColor3 = menuVisible and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 255, 255)
     hideStroke.Color = hideButton.TextColor3
-  for _, obj in ipairs(mainFrame:GetChildren()) do
-    if obj:IsA("GuiObject") then
-        if obj.Name ~= "TitleText" and obj.Name ~= "HideButton" then
-            obj.Visible = menuVisible
-        end
+    for _, obj in pairs(mainFrame:GetChildren()) do
+        if obj.Name ~= "TitleText" and obj.Name ~= "HideButton" then obj.Visible = menuVisible end
     end
-end
     local tInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     tweenService:Create(outerFrame, tInfo, {Size = UDim2.new(0, 514, 0, targetOuterH)}):Play()
     tweenService:Create(mainFrame, tInfo, {Size = UDim2.new(0, 510, 0, targetMainH)}):Play()
@@ -212,11 +209,11 @@ Instance.new("UICorner", viewButton).CornerRadius = UDim.new(0, 4)
 local p3ViewStroke = Instance.new("UIStroke", viewButton)
 p3ViewStroke.Color = Color3.fromRGB(60, 60, 60)
 
--- INJECTED RIGHT COMPONENT: Your clean new multi-part farming text frame
+-- RIGHT PANEL FARMING UNIT: Target Part Name Input
 local partTextBox = Instance.new("TextBox", mainFrame)
 partTextBox.Name = "PartTextBox"
 partTextBox.Size = UDim2.new(0, 234, 0, 30)
-partTextBox.Position = UDim2.new(0, 264, 0, 40) -- Perfectly docked on the right side field array row!
+partTextBox.Position = UDim2.new(0, 264, 0, 40)
 partTextBox.PlaceholderText = "> ENTER OBJECT/PART NAME"
 partTextBox.Text = ""
 partTextBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -230,10 +227,51 @@ partBoxStroke.Color = Color3.fromRGB(50, 50, 50)
 
 partTextBox:GetPropertyChangedSignal("Text"):Connect(function() _G.HimxConfig.PartText = partTextBox.Text end)
 
+-- NEW: Part Loop Goto Speed Multiplier Tracker Label
+local partSliderLabel = Instance.new("TextLabel", mainFrame)
+partSliderLabel.Size = UDim2.new(0, 234, 0, 20)
+partSliderLabel.Position = UDim2.new(0, 264, 0, 75)
+partSliderLabel.Text = "PART SPEED: 0.005s"
+partSliderLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+partSliderLabel.BackgroundTransparency = 1
+partSliderLabel.Font = Enum.Font.Code
+partSliderLabel.TextSize = 11
+partSliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+_G.HimxUpdatePartLabel = function(val) partSliderLabel.Text = "PART SPEED: " .. tostring(val) .. "s" end
+
+-- NEW: Part Speed Rail (Minimum: 0.0001, Maximum: 1.0)
+local partSliderTrack = Instance.new("Frame", mainFrame)
+partSliderTrack.Size = UDim2.new(0, 234, 0, 6)
+partSliderTrack.Position = UDim2.new(0, 264, 0, 95)
+partSliderTrack.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
+Instance.new("UICorner", partSliderTrack).CornerRadius = UDim.new(0, 3)
+Instance.new("UIStroke", partSliderTrack).Color = Color3.fromRGB(0, 255, 100)
+
+local partSliderHandle = Instance.new("TextButton", partSliderTrack)
+partSliderHandle.Size = UDim2.new(0, 12, 0, 16)
+partSliderHandle.Position = UDim2.new(0.005, -6, 0.5, -8) -- Starts nicely near the fast end
+partSliderHandle.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+partSliderHandle.Text = ""
+Instance.new("UICorner", partSliderHandle).CornerRadius = UDim.new(0, 3)
+
+local function processPartSlider(input)
+    local relativeX = math.clamp((input.Position.X - partSliderTrack.AbsolutePosition.X) / partSliderTrack.AbsoluteSize.X, 0, 1)
+    partSliderHandle.Position = UDim2.new(relativeX, -6, 0.5, -8)
+    -- Mathematical scaling logic between 0.0001 and 1.0
+    local rawSpeed = 0.0001 + (relativeX * (1.0 - 0.0001))
+    _G.HimxConfig.PartLoopSpeed = math.floor(rawSpeed * 10000) / 10000
+    if _G.HimxUpdatePartLabel then _G.HimxUpdatePartLabel(_G.HimxConfig.PartLoopSpeed) end
+end
+
+partSliderHandle.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isPartSliding = true end end)
+game:GetService("UserInputService").InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then _G.HimxConfig.isPartSliding = false end end)
+game:GetService("UserInputService").InputChanged:Connect(function(input) if _G.HimxConfig.isPartSliding and input.UserInputType == Enum.UserInputType.MouseMovement then processPartSlider(input) end end)
+
 local partToggleButton = Instance.new("TextButton", mainFrame)
 partToggleButton.Name = "PartToggle"
-partToggleButton.Size = UDim2.new(0, 234, 0, 60)
-partToggleButton.Position = UDim2.new(0, 264, 0, 80)
+partToggleButton.Size = UDim2.new(0, 234, 0, 30)
+partToggleButton.Position = UDim2.new(0, 264, 0, 112)
 partToggleButton.Text = "LOOPGOTO PART: OFF"
 partToggleButton.BackgroundColor3 = Color3.fromRGB(40, 15, 15)
 partToggleButton.TextColor3 = Color3.fromRGB(255, 80, 80)
@@ -410,7 +448,7 @@ local function getAllTargetParts(name)
     return targets
 end
 
--- MULTI-PART FARM LOOP RUNNER: Integrated safely straight into backend hardware clock threads
+-- UPGRADED PART SWEEPER ENGINE: Hooks directly into your new custom speed variables dynamically
 task.spawn(function()
     while true do
         if _G.HimxConfig.PartLoopActive then
@@ -423,7 +461,8 @@ task.spawn(function()
                     if character and character:FindFirstChild("HumanoidRootPart") and part and part.Parent then
                         character.HumanoidRootPart.CFrame = part.CFrame * CFrame.new(0, 3, 0)
                     end
-                    task.wait(0.005) 
+                    -- Reads the precise value from your new slider bar live!
+                    task.wait(_G.HimxConfig.PartLoopSpeed) 
                 end
             end
         end
@@ -510,9 +549,9 @@ task.spawn(function()
     while true do
         for i = 0, 1, 0.02 do
             if not screenGui:FindFirstChild("OuterFrame") then break end
-            local wave = math.sin(i * math.pi)
-screenGui.OuterFrame.BackgroundColor3 = Color3.fromRGB(0,130 + (wave * 125), 50 + (wave * 50))
-task.wait(0.04)
+local wave = math.sin(i * math.pi)
+screenGui.OuterFrame.BackgroundColor3 = Color3.fromRGB(0, 130 + (wave * 125), 50 + (wave * 50))
+task.wait(0.04) 
         end
     end
 end)
